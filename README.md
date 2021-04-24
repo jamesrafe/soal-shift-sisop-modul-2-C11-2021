@@ -23,7 +23,7 @@ Contoh: “/petshop/cat/joni.jpg”.
 ## Jawaban Nomor 2
 
 **(a)** 
-```
+```c
 pid_t child_id[10];
   int status[10];
   
@@ -43,7 +43,7 @@ pid_t child_id[10];
 ```
 Pertama, kita diminta untuk membuat folder "/home/[user]/modul2/petshop" dan mengekstrak zip yang kita diberikan ke dalamnya. Untuk melakukan itu, kita membuat anak, dan anak itu kita suruh untuk membuat folder modul2, dan folder petshop di dalamnya dengan command execv. Lalu, kita beli wait, supaya parent processnya bisa menunggu child process untuk menyelesaikan proses pembuatan foldernya. Setelah child process sudah selesai, kita membuat child baru lagi untuk men-unzip zip yang kita diberikan ke dalam modul2/petshop.
 
-```
+```c
   while ((wait(&status[1])) > 0);
   child_id[2] = fork();
   if (child_id[2] == 0) {
