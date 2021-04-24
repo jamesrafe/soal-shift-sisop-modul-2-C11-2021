@@ -25,7 +25,6 @@ int handleAnimal(char filename[], int j){
   
  	return j;
 }
-
 int handleName(char filename[], int j){
 	int charCount=0;
 	for(j=j+1; j<strlen(filename)-4; j++){
@@ -38,7 +37,6 @@ int handleName(char filename[], int j){
   	nameCount++;
   	return j;
 }
-
 int handleAge(char filename[], int j){
 	int charCount=0;
 	for(j=j+1; j<strlen(filename)-4; j++){
@@ -52,7 +50,6 @@ int handleAge(char filename[], int j){
   	ageCount++;
   	return j;
 }
-
 int handleElse(char filename[], int j){
 	j = handleAnimal(filename, j);
 	j = handleName(filename, j);
@@ -117,7 +114,6 @@ int handleElse(char filename[], int j){
  	 }
 }
 
-
 int main() {
   pid_t child_id[10];
   int status[10];
@@ -134,8 +130,7 @@ int main() {
   if (child_id[1] == 0) {
   	char *argv[] = {"unzip", "/home/solxius/Downloads/pets.zip", "-d", "/home/solxius/modul2/petshop/", NULL};
 	execv("/bin/unzip", argv);
-  }
-  
+  }  
   while ((wait(&status[1])) > 0);
   child_id[2] = fork();
   if (child_id[2] == 0) {
@@ -150,15 +145,12 @@ int main() {
         }
         
      	argv[count+1] = NULL;
-
 	execv("/bin/rm", argv);
-  }
-  
+  }  
   while ((wait(&status[2])) > 0);
   printf("parent\n");
   
   struct dirent **namelist;
-
   int n = scandir("/home/solxius/modul2/petshop/", &namelist, NULL, alphasort);
   if (n == -1) {
       perror("scandir");
@@ -170,10 +162,8 @@ int main() {
        free(namelist[i]);
   }
   free(namelist);
-  
   for(int i=2; i<n; i++){
   	int test = handleElse(filename[i], 0);
-  }
-  
+  }  
   return 0;
 }
