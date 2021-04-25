@@ -433,9 +433,11 @@ Screenshot hasil saat mode -x dan -z dijalankan
 ![Screenshot from 2021-04-25 22-12-30](https://user-images.githubusercontent.com/63457105/115998843-6ee4a600-a613-11eb-820d-b47c449956e9.png)
 
 isi dari file
+
 ![Screenshot from 2021-04-25 22-14-11](https://user-images.githubusercontent.com/63457105/115998875-9f2c4480-a613-11eb-9775-bbc98c2ae596.png)
 
 Hasil enkripsi Caesar Cipher
+
 ![Screenshot from 2021-04-25 22-15-15](https://user-images.githubusercontent.com/63457105/115998901-bff49a00-a613-11eb-9961-91be67f32c6f.png)
 
 
