@@ -4,7 +4,6 @@
 * Mohammad Tauchid		(05111940000136)
 * Kevin Davi Samuel		(05111940000157)
 
-# Soal dan Penjelasan Jawaban
 ## Soal Nomor 1
 Pada suatu masa, hiduplah seorang Steven yang hidupnya pas-pasan. Steven punya pacar, namun sudah putus sebelum pacaran. Ketika dia galau memikirkan mantan, ia selalu menonton https://www.youtube.com/watch?v=568DH_9CMKI untuk menghilangkan kesedihannya. 
 
@@ -265,6 +264,7 @@ Setelah dicek dan hasilnya **true**, maka jalankan program untuk men-zip semua f
 
 Yang pertama dilakukan adalah `fork` untuk membuat *child process* baru lalu lakukan zip dengan flag `-r` yang berfungsi untuk men-zip folder beserta isinya. Setelah zip selesai, maka hapus semua folder dengan flag `-r` yang juga untuk menghapus folder beserta isinya.
 
+# Soal dan Penjelasan Jawaban
 ## Soal Nomor 2
 Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang berisi banyak sekali foto peliharaan dan Ia diperintahkan untuk mengkategorikan foto-foto peliharaan tersebut. Loba merasa kesusahan melakukan pekerjaanya secara manual, apalagi ada kemungkinan ia akan diperintahkan untuk melakukan hal yang sama. Kamu adalah teman baik Loba dan Ia meminta bantuanmu untuk membantu pekerjaannya.
 
@@ -324,180 +324,6 @@ Pertama, kita diminta untuk membuat folder "/home/[user]/modul2/petshop" dan men
 ```
 Selanjutnya, kita diminta untuk menghapus semua folder yang ada di dalam folder modul2/petshop. Untuk melakukan itu, kita menggunakan glob. Glob gunanya untuk mencari semua folder dengan filter yang ditentukan (di case ini, wildcard). Lalu, dengan result yang diberikan glob, kita membuat child baru dan menggunakan execv untuk meng-remove semua hasil result glob.
 
-**(b, c, d, e)** 
-```c
-
-  struct dirent **namelist;
-  int n = scandir("/home/solxius/modul2/petshop/", &namelist, NULL, alphasort);
-  if (n == -1) {
-      perror("scandir");
-      exit(EXIT_FAILURE);
-  }
-  char filename[n][50];
-  for(int i=0; i<n; i++) {
-       strcpy(filename[i], namelist[i]->d_name);
-       free(namelist[i]);
-  }
-  free(namelist);
-  for(int i=2; i<n; i++){
-  	int test = handleElse(filename[i], 0);
-  }  
-```
-Selanjutnya, untuk dapat menkategorisasikan hewan-hewannya, kita mengambil dulu nama-nama filenya dengan command scandir, lalu memasukkannya ke dalam array. Lalu, untuk setiap nama file, kita berikan ke dalam fungsi HandleElse.
-
-```c
-int animalCount = 0, nameCount = 0, ageCount = 0;
-char animals[55][20];
-char names[55][20];
-char ages[55][3];
-
-int handleElse(char filename[], int j){
-	j = handleAnimal(filename, j);
-	j = handleName(filename, j);
-	j = handleAge(filename, j);
-```
-Dengan variabel global untuk menampung tipe, nama, dan umurnya, kita di fungsi handleElse, memberikan nama file-filenya ke dalam fungsi handleAnimal, handleName, dan handleAge, untuk menyimpan.
-
-```c
-int handleAnimal(char filename[], int j){
-	int charCount=0;
-	for(; j<strlen(filename)-4; j++){
-  		if(filename[j] == ';'){
-  			break;
-  		}
-  		animals[animalCount][charCount] = filename[j];
-  		charCount++;
-  	}
-  	animalCount++;
-  
- 	return j;
-}
-int handleName(char filename[], int j){
-	int charCount=0;
-	for(j=j+1; j<strlen(filename)-4; j++){
-  		if(filename[j] == ';'){
-  			break;
-  		}
-  		names[nameCount][charCount] = filename[j];
-  		charCount++;
-  	}
-  	nameCount++;
-  	return j;
-}
-int handleAge(char filename[], int j){
-	int charCount=0;
-	for(j=j+1; j<strlen(filename)-4; j++){
-  		if(filename[j] == '_'){
-  			j++;
-  			break;
-  		}
-  		ages[ageCount][charCount] = filename[j];
-  		charCount++;
-  	}
-  	ageCount++;
-  	return j;
-}
-```
-Selanjutnya, fungsi di atas adalah untuk menyimpan nama-nama dari setiap hewan, nama, dan umur. Untuk setiap karakter, jika ditemukan ;, langsung return indeksnya. Lalu, indeks diberikan ke fungsi selanjutnya untuk memulai fungsi mereka. Pada handleAge, saat bertemu _ atau jika sudah selesai, direturn. Dengan itu, semua telah disimpan.
-
-```c
-	pid_t cid[10];
-  	int stat[10];
-  	char loc[100] = "modul2/petshop/";
-  	char curloc[100] = "modul2/petshop/";
-  	char animalName[50], animalName2[50], animalName3[50];
-  	strcpy(animalName, animals[animalCount-1]);
-  	strcpy(animalName2, animals[animalCount-1]);
-  	strcpy(animalName3, animals[animalCount-1]);
-  	strcat(loc, animalName);
-  	strcat(curloc, filename); 	
-  
-  	cid[0] = fork();
-
-  	if (cid[0] == 0) {
-  		char *argv[4] = {"mkdir", "-p", loc, NULL};
-		execv("/bin/mkdir", argv);
- 	 }
-  
- 	 while ((wait(&stat[0])) > 0);
-```
-
-Selanjutnya, kita membuat child baru untuk menggunakan exec dan membuat folder untuk setiap hewan. Setiap kali melewati satu file, akan dilakukan mkdir, namun karena ada '-p', yang fungsinya adalah untuk dibiarkan jika sudah ada foldernya, tidak ada folder duplikat.
-
-```c
-	 char log[30]="";
- 	 
- 	 FILE *fp;
- 	 strcat(log, "/home/solxius/modul2/petshop/");
- 	 strcat(log, animalName2);
- 	 strcat(log, "/keterangan.txt");
- 	 
- 	 fp = fopen (log, "a");
-   	 fprintf(fp, "nama : %s\numur : %s\n\n", names[nameCount-1], ages[ageCount-1]);  
-   	 fclose(fp);
-```
-Selanjutnya, untuk file itu, kita membuat file dengan nama 'keterangan.txt' di folder tersebut. a berarti append (jika tidak ada, dibikinkan filenya, jika ada, hanya append). Kita memasukkan nama dan umur yang sudah disimpan.
-
-```c
-	 char loca[100] = "modul2/petshop/";
-   	 strcat(loca, animalName3);
- 	 strcat(loca, "/");
-  	 strcat(loca, names[nameCount-1]);
-  	 strcat(loca, ".jpg");
- 	 
- 	 if(j<strlen(filename)-4){
- 	 	cid[1] = fork();
-
-	  	if (cid[1] == 0) {
-	  		char *argv[4] = {"cp", curloc, loca, NULL};
-			execv("/bin/cp", argv);
-	 	 }
-	 	 while ((wait(&stat[1])) > 0);
-  		handleElse(filename, j);
-  	 }
- 	 
- 	 else{
- 	 	cid[1] = fork();
-
-	  	if (cid[1] == 0) {
-	  		char *argv[4] = {"mv", curloc, loca, NULL};
-			execv("/bin/mv", argv);
-	 	 }
-	 	 while ((wait(&stat[1])) > 0);
- 	 	return j;
- 	 }
-```
-Di sini, kita simpan path, lalu mengecek. Jika, indeks untuk file itu masih di bawah strlen(filename)-4 (karena ada .jpg nya), berarti di handleAge, ditemukan _ sehingga masih ada hewan lagi, jadi kita hanya meng-copy ke foldernya (dengan mengganti nama sesuai nama yang sudah disimpan), dan dilakukan handleElse dengan indeks sekarang.
-
-Jika sudah selesai, langsung move.
-
-## Dokumentasi
-Saat unzip:
-
-![sisop1](https://user-images.githubusercontent.com/68369091/115996623-39878a80-a60a-11eb-8fdd-e8957c694aa4.png)
-
-Folder-foldernya:
-
-![sisop2](https://user-images.githubusercontent.com/68369091/115996627-3b514e00-a60a-11eb-81c3-e3a8d2e07482.png)
-
-Folder cat:
-
-![sisop3](https://user-images.githubusercontent.com/68369091/115996630-3be9e480-a60a-11eb-9620-fb41b10c7edd.png)
-
-Folder dog:
-
-![sisop4](https://user-images.githubusercontent.com/68369091/115996631-3c827b00-a60a-11eb-99b0-e2bcc33042f9.png)
-
-Isi keterangan dog:
-
-![sisop5](https://user-images.githubusercontent.com/68369091/115996632-3c827b00-a60a-11eb-999e-63b26951df9b.png)
-
-
-## Kendala
-- Memiliki beberapa kendala dengan fork(). 
-- fopen() memiliki beberapa masalah karena tidak memakai path yang full
-- glob() susah sehingga harus mencari dokumentasi yang banyak.
-
 ## Soal Nomor 3
 Ranora adalah mahasiswa Teknik Informatika yang saat ini sedang menjalani magang di perusahan ternama yang bernama “FakeKos Corp.”, perusahaan yang bergerak dibidang keamanan data. Karena Ranora masih magang, maka beban tugasnya tidak sebesar beban tugas pekerja tetap perusahaan. Di hari pertama Ranora bekerja, pembimbing magang Ranora memberi tugas pertamanya untuk membuat sebuah program.
 
@@ -510,3 +336,28 @@ Ranora adalah mahasiswa Teknik Informatika yang saat ini sedang menjalani magang
 **(d)** Untuk mempermudah pengendalian program, pembimbing magang Ranora ingin program tersebut akan men-generate sebuah program “Killer” yang executable, dimana program tersebut akan menterminasi semua proses program yang sedang berjalan dan akan menghapus dirinya sendiri setelah program dijalankan. Karena Ranora menyukai sesuatu hal yang baru, maka Ranora memiliki ide untuk program “Killer” yang dibuat nantinya harus merupakan program bash.
 
 **(e)** Pembimbing magang Ranora juga ingin nantinya program utama yang dibuat Ranora dapat dijalankan di dalam dua mode. Untuk mengaktifkan mode pertama, program harus dijalankan dsdengan argumen -z, dan Ketika dijalankan dalam mode pertama, program utama akan langsung menghentikan semua operasinya Ketika program Killer dijalankan. Sedangkan untuk mengaktifkan mode kedua, program harus dijalankan dengan argumen -x, dan Ketika dijalankan dalam mode kedua, program utama akan berhenti namun membiarkan proses di setiap direktori yang masih berjalan hingga selesai (Direktori yang sudah dibuat akan mendownload gambar sampai selesai dan membuat file txt, lalu zip dan delete direktori).
+
+## Jawaban Nomor 3
+**(a)** Untuk menyelesaikan soal ini, kita harus mengambil waktu saat ini, dan mengulangnya tiap 40 detik
+'''now = time(0) ;
+        t = *localtime(&now) ;
+        strftime(buff, sizeof(buff), "%Y-%m-%d_%X", &t) ;
+
+        child_id = fork() ;
+
+        if (child_id < 0) {
+            exit(EXIT_FAILURE) ;
+        }
+
+        if (child_id == 0) {
+            // int status ;
+            if (fork() == 0) {
+                char* arg[] = {"mkdir", "-p", buff, NULL} ;
+                execv("/bin/mkdir", arg) ;
+            }
+        }
+'''
+**(b)**
+**(c)**
+**(d)**
+**(e)**
