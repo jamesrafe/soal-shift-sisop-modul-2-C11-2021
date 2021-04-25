@@ -324,6 +324,158 @@ Pertama, kita diminta untuk membuat folder "/home/[user]/modul2/petshop" dan men
 ```
 Selanjutnya, kita diminta untuk menghapus semua folder yang ada di dalam folder modul2/petshop. Untuk melakukan itu, kita menggunakan glob. Glob gunanya untuk mencari semua folder dengan filter yang ditentukan (di case ini, wildcard). Lalu, dengan result yang diberikan glob, kita membuat child baru dan menggunakan execv untuk meng-remove semua hasil result glob.
 
+**(b, c, d, e)** 
+```c
+
+  struct dirent **namelist;
+  int n = scandir("/home/solxius/modul2/petshop/", &namelist, NULL, alphasort);
+  if (n == -1) {
+      perror("scandir");
+      exit(EXIT_FAILURE);
+  }
+  char filename[n][50];
+  for(int i=0; i<n; i++) {
+       strcpy(filename[i], namelist[i]->d_name);
+       free(namelist[i]);
+  }
+  free(namelist);
+  for(int i=2; i<n; i++){
+  	int test = handleElse(filename[i], 0);
+  }  
+```
+Selanjutnya, untuk dapat menkategorisasikan hewan-hewannya, kita mengambil dulu nama-nama filenya dengan command scandir, lalu memasukkannya ke dalam array. Lalu, untuk setiap nama file, kita berikan ke dalam fungsi HandleElse.
+
+```c
+int animalCount = 0, nameCount = 0, ageCount = 0;
+char animals[55][20];
+char names[55][20];
+char ages[55][3];
+
+int handleElse(char filename[], int j){
+	j = handleAnimal(filename, j);
+	j = handleName(filename, j);
+	j = handleAge(filename, j);
+```
+Dengan variabel global untuk menampung tipe, nama, dan umurnya, kita di fungsi handleElse, memberikan nama file-filenya ke dalam fungsi handleAnimal, handleName, dan handleAge, untuk menyimpan.
+
+```c
+int handleAnimal(char filename[], int j){
+	int charCount=0;
+	for(; j<strlen(filename)-4; j++){
+  		if(filename[j] == ';'){
+  			break;
+  		}
+  		animals[animalCount][charCount] = filename[j];
+  		charCount++;
+  	}
+  	animalCount++;
+  
+ 	return j;
+}
+int handleName(char filename[], int j){
+	int charCount=0;
+	for(j=j+1; j<strlen(filename)-4; j++){
+  		if(filename[j] == ';'){
+  			break;
+  		}
+  		names[nameCount][charCount] = filename[j];
+  		charCount++;
+  	}
+  	nameCount++;
+  	return j;
+}
+int handleAge(char filename[], int j){
+	int charCount=0;
+	for(j=j+1; j<strlen(filename)-4; j++){
+  		if(filename[j] == '_'){
+  			j++;
+  			break;
+  		}
+  		ages[ageCount][charCount] = filename[j];
+  		charCount++;
+  	}
+  	ageCount++;
+  	return j;
+}
+```
+Selanjutnya, fungsi di atas adalah untuk menyimpan nama-nama dari setiap hewan, nama, dan umur. Untuk setiap karakter, jika ditemukan ;, langsung return indeksnya. Lalu, indeks diberikan ke fungsi selanjutnya untuk memulai fungsi mereka. Pada handleAge, saat bertemu _ atau jika sudah selesai, direturn. Dengan itu, semua telah disimpan.
+
+```c
+	pid_t cid[10];
+  	int stat[10];
+  	char loc[100] = "modul2/petshop/";
+  	char curloc[100] = "modul2/petshop/";
+  	char animalName[50], animalName2[50], animalName3[50];
+  	strcpy(animalName, animals[animalCount-1]);
+  	strcpy(animalName2, animals[animalCount-1]);
+  	strcpy(animalName3, animals[animalCount-1]);
+  	strcat(loc, animalName);
+  	strcat(curloc, filename); 	
+  
+  	cid[0] = fork();
+
+  	if (cid[0] == 0) {
+  		char *argv[4] = {"mkdir", "-p", loc, NULL};
+		execv("/bin/mkdir", argv);
+ 	 }
+  
+ 	 while ((wait(&stat[0])) > 0);
+```
+
+Selanjutnya, kita membuat child baru untuk menggunakan exec dan membuat folder untuk setiap hewan. Setiap kali melewati satu file, akan dilakukan mkdir, namun karena ada '-p', yang fungsinya adalah untuk dibiarkan jika sudah ada foldernya, tidak ada folder duplikat.
+
+```c
+	 char log[30]="";
+ 	 
+ 	 FILE *fp;
+ 	 strcat(log, "/home/solxius/modul2/petshop/");
+ 	 strcat(log, animalName2);
+ 	 strcat(log, "/keterangan.txt");
+ 	 
+ 	 fp = fopen (log, "a");
+   	 fprintf(fp, "nama : %s\numur : %s\n\n", names[nameCount-1], ages[ageCount-1]);  
+   	 fclose(fp);
+```
+Selanjutnya, untuk file itu, kita membuat file dengan nama 'keterangan.txt' di folder tersebut. a berarti append (jika tidak ada, dibikinkan filenya, jika ada, hanya append). Kita memasukkan nama dan umur yang sudah disimpan.
+
+```c
+	 char loca[100] = "modul2/petshop/";
+   	 strcat(loca, animalName3);
+ 	 strcat(loca, "/");
+  	 strcat(loca, names[nameCount-1]);
+  	 strcat(loca, ".jpg");
+ 	 
+ 	 if(j<strlen(filename)-4){
+ 	 	cid[1] = fork();
+
+	  	if (cid[1] == 0) {
+	  		char *argv[4] = {"cp", curloc, loca, NULL};
+			execv("/bin/cp", argv);
+	 	 }
+	 	 while ((wait(&stat[1])) > 0);
+  		handleElse(filename, j);
+  	 }
+ 	 
+ 	 else{
+ 	 	cid[1] = fork();
+
+	  	if (cid[1] == 0) {
+	  		char *argv[4] = {"mv", curloc, loca, NULL};
+			execv("/bin/mv", argv);
+	 	 }
+	 	 while ((wait(&stat[1])) > 0);
+ 	 	return j;
+ 	 }
+```
+Di sini, kita simpan path, lalu mengecek. Jika, indeks untuk file itu masih di bawah strlen(filename)-4 (karena ada .jpg nya), berarti di handleAge, ditemukan _ sehingga masih ada hewan lagi, jadi kita hanya meng-copy ke foldernya (dengan mengganti nama sesuai nama yang sudah disimpan), dan dilakukan handleElse dengan indeks sekarang.
+
+Jika sudah selesai, langsung move.
+
+## Kendala
+- Memiliki beberapa kendala dengan fork(). 
+- fopen() memiliki beberapa masalah karena tidak memakai path yang full
+- glob() susah sehingga harus mencari dokumentasi yang banyak.
+
 ## Soal Nomor 3
 Ranora adalah mahasiswa Teknik Informatika yang saat ini sedang menjalani magang di perusahan ternama yang bernama “FakeKos Corp.”, perusahaan yang bergerak dibidang keamanan data. Karena Ranora masih magang, maka beban tugasnya tidak sebesar beban tugas pekerja tetap perusahaan. Di hari pertama Ranora bekerja, pembimbing magang Ranora memberi tugas pertamanya untuk membuat sebuah program.
 
