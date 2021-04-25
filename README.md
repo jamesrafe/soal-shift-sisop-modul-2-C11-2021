@@ -471,6 +471,14 @@ Di sini, kita simpan path, lalu mengecek. Jika, indeks untuk file itu masih di b
 
 Jika sudah selesai, langsung move.
 
+## Dokumentasi
+![sisop1](https://user-images.githubusercontent.com/68369091/115996623-39878a80-a60a-11eb-8fdd-e8957c694aa4.png)
+![sisop2](https://user-images.githubusercontent.com/68369091/115996627-3b514e00-a60a-11eb-81c3-e3a8d2e07482.png)
+![sisop3](https://user-images.githubusercontent.com/68369091/115996630-3be9e480-a60a-11eb-9620-fb41b10c7edd.png)
+![sisop4](https://user-images.githubusercontent.com/68369091/115996631-3c827b00-a60a-11eb-99b0-e2bcc33042f9.png)
+![sisop5](https://user-images.githubusercontent.com/68369091/115996632-3c827b00-a60a-11eb-999e-63b26951df9b.png)
+
+
 ## Kendala
 - Memiliki beberapa kendala dengan fork(). 
 - fopen() memiliki beberapa masalah karena tidak memakai path yang full
