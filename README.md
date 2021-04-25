@@ -473,18 +473,23 @@ Jika sudah selesai, langsung move.
 
 ## Dokumentasi
 Saat unzip:
+
 ![sisop1](https://user-images.githubusercontent.com/68369091/115996623-39878a80-a60a-11eb-8fdd-e8957c694aa4.png)
 
 Folder-foldernya:
+
 ![sisop2](https://user-images.githubusercontent.com/68369091/115996627-3b514e00-a60a-11eb-81c3-e3a8d2e07482.png)
 
 Folder cat:
+
 ![sisop3](https://user-images.githubusercontent.com/68369091/115996630-3be9e480-a60a-11eb-9620-fb41b10c7edd.png)
 
 Folder dog:
+
 ![sisop4](https://user-images.githubusercontent.com/68369091/115996631-3c827b00-a60a-11eb-99b0-e2bcc33042f9.png)
 
 Isi keterangan dog:
+
 ![sisop5](https://user-images.githubusercontent.com/68369091/115996632-3c827b00-a60a-11eb-999e-63b26951df9b.png)
 
 
