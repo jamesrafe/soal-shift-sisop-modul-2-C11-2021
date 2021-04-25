@@ -4,6 +4,7 @@
 * Mohammad Tauchid		(05111940000136)
 * Kevin Davi Samuel		(05111940000157)
 
+# Soal dan Penjelasan Jawaban
 ## Soal Nomor 1
 Pada suatu masa, hiduplah seorang Steven yang hidupnya pas-pasan. Steven punya pacar, namun sudah putus sebelum pacaran. Ketika dia galau memikirkan mantan, ia selalu menonton https://www.youtube.com/watch?v=568DH_9CMKI untuk menghilangkan kesedihannya. 
 
@@ -264,7 +265,6 @@ Setelah dicek dan hasilnya **true**, maka jalankan program untuk men-zip semua f
 
 Yang pertama dilakukan adalah `fork` untuk membuat *child process* baru lalu lakukan zip dengan flag `-r` yang berfungsi untuk men-zip folder beserta isinya. Setelah zip selesai, maka hapus semua folder dengan flag `-r` yang juga untuk menghapus folder beserta isinya.
 
-# Soal dan Penjelasan Jawaban
 ## Soal Nomor 2
 Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang berisi banyak sekali foto peliharaan dan Ia diperintahkan untuk mengkategorikan foto-foto peliharaan tersebut. Loba merasa kesusahan melakukan pekerjaanya secara manual, apalagi ada kemungkinan ia akan diperintahkan untuk melakukan hal yang sama. Kamu adalah teman baik Loba dan Ia meminta bantuanmu untuk membantu pekerjaannya.
 
@@ -472,10 +472,19 @@ Di sini, kita simpan path, lalu mengecek. Jika, indeks untuk file itu masih di b
 Jika sudah selesai, langsung move.
 
 ## Dokumentasi
+Saat unzip:
 ![sisop1](https://user-images.githubusercontent.com/68369091/115996623-39878a80-a60a-11eb-8fdd-e8957c694aa4.png)
+
+Folder-foldernya:
 ![sisop2](https://user-images.githubusercontent.com/68369091/115996627-3b514e00-a60a-11eb-81c3-e3a8d2e07482.png)
+
+Folder cat:
 ![sisop3](https://user-images.githubusercontent.com/68369091/115996630-3be9e480-a60a-11eb-9620-fb41b10c7edd.png)
+
+Folder dog:
 ![sisop4](https://user-images.githubusercontent.com/68369091/115996631-3c827b00-a60a-11eb-99b0-e2bcc33042f9.png)
+
+Isi keterangan dog:
 ![sisop5](https://user-images.githubusercontent.com/68369091/115996632-3c827b00-a60a-11eb-999e-63b26951df9b.png)
 
 
