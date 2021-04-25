@@ -338,8 +338,8 @@ Ranora adalah mahasiswa Teknik Informatika yang saat ini sedang menjalani magang
 **(e)** Pembimbing magang Ranora juga ingin nantinya program utama yang dibuat Ranora dapat dijalankan di dalam dua mode. Untuk mengaktifkan mode pertama, program harus dijalankan dsdengan argumen -z, dan Ketika dijalankan dalam mode pertama, program utama akan langsung menghentikan semua operasinya Ketika program Killer dijalankan. Sedangkan untuk mengaktifkan mode kedua, program harus dijalankan dengan argumen -x, dan Ketika dijalankan dalam mode kedua, program utama akan berhenti namun membiarkan proses di setiap direktori yang masih berjalan hingga selesai (Direktori yang sudah dibuat akan mendownload gambar sampai selesai dan membuat file txt, lalu zip dan delete direktori).
 
 ## Jawaban Nomor 3
-**(a)** Untuk menyelesaikan soal ini, kita harus mengambil waktu saat ini, dan mengulangnya tiap 40 detik
-'''now = time(0) ;
+**(a)** Untuk menyelesaikan soal ini, kita harus mengambil waktu saat ini 
+```now = time(0) ;
         t = *localtime(&now) ;
         strftime(buff, sizeof(buff), "%Y-%m-%d_%X", &t) ;
 
@@ -356,8 +356,76 @@ Ranora adalah mahasiswa Teknik Informatika yang saat ini sedang menjalani magang
                 execv("/bin/mkdir", arg) ;
             }
         }
-'''
-**(b)**
-**(c)**
-**(d)**
-**(e)**
+```
+Mengulangnya tiap 40 detik
+```time_t first = time(0), second ;
+        while (difftime(second, first) != 40) {
+            second = time(0) ;
+```
+
+**(b)** Untuk menjawab soal ini, kita melakukan loop sebanyak 10 kali untuk fork, mengambil format timestamp, mengambil path hasil unduhan, menghitung ukuran gambar, dan mendownload gambar
+```if (fork() == 0) {
+                    continue ;
+                }
+
+                time_t new_now = time(0) ;
+                struct tm new_tstruct = *localtime(&new_now) ;
+                char new_buff[80] ;
+                strftime(new_buff, sizeof(new_buff), "%Y-%m-%d_%X", &new_tstruct) ;
+                
+                char path[80] ;
+                strcpy(path, buff) ;
+                strcat(path, "/") ;
+                strcat(path, new_buff) ;
+                
+                char link[80] = "https://picsum.photos/" ;
+                int picsize = (((long)mktime(&t)) % 1000) + 50 ;
+                char num[10] ;
+                sprintf(num, "%d", picsize) ;
+                strcat(link, num) ;
+
+                char* arg[] = {"wget", "-q", "-O", path, link, NULL} ;
+                execv("/bin/wget", arg) ;
+            }
+```
+**(c)** Untuk menjawab soal ini akan menggunakan Caesar Cipher untuk mengenkripsi status.txt yang berisi "Download Success"
+```char str[30] = "Download Success", p[30] ;
+            int j ;
+            for (j = 0 ; j < strlen(str) ; j++) {
+                if (str[j] == ' ') continue ;
+                if ((str[j] >= 'a' && str[j] <= 'z' && str[j] + 5 > 'z') || (str[j] >= 'A' && str[j] <= 'Z' && str[j] + 5 > 'Z'))
+                    str[j] -= 26 ;
+                str[j] += 5 ;
+            }
+            strcpy(p, buff) ;
+            strcat(p, "/") ;
+            strcat(p, "status.txt") ;
+            FILE* txt = fopen(p, "w") ;
+            fputs(str, txt) ;
+            fclose(txt) ;
+            
+            strcpy(p, buff) ;
+            strcat(p, ".zip") ;
+            char* argz[] = {"zip", p, "-q", "-m", "-r", buff, NULL} ;
+            execv("/bin/zip", argz) ;
+```
+**(d) dan (e)**
+Pertama kita membuat dua program utama, yaitu -z, dimana ketika program killer dijalankan, maka akan langsung menghentikan semua operasi yang sedang berjalan
+```if (!strcmp(argv[1], "-z")) {
+    strcpy(b, "#!/bin/bash\nkillall -9 ./soal3\nrm $0\n") ;
+    make_program(b) ;
+}
+```
+Lalu program -x, dimana ketika program killer dijalankan, menunggu proses selesai sebelum operasi dihentikan
+```else if (!strcmp(argv[1], "-x")) {
+    strcpy(b, "#!/bin/bash\nkillall -15 ./soal3\nrm $0\n") ;
+    make_program(b) ;
+    signal(SIGTERM, custom_signal_x) ;
+}
+```
+
+Beberapa kendala yang dialami :
+1. Memahami soal yang menurut saya cukup rumit
+2. Salah membuat syntax
+
+Screenshot hasil program :
